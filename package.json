@@ -3,6 +3,7 @@
   "displayName": "OptiMap",
   "description": "Visualizing and optimizing your code flow with interactive maps.",
   "version": "0.0.1",
+  "icon": "resources/logo.png",
   "engines": {
     "vscode": "^1.110.0"
   },
@@ -12,10 +13,23 @@
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "optimap-explorer",
+          "title": "OptiMap",
+          "icon": "resources/sidebar.png"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "optimap.helloWorld",
         "title": "Hello World"
+      },
+      {
+        "command": "optimap.analyze",
+        "title": "OptiMap: Analyze AI Workflow Paths"
       }
     ]
   },

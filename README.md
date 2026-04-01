@@ -1,22 +1,26 @@
 # OptiMap README
 
-This is the README for your extension "-optimap-". After writing up a brief description, we recommend including the following sections.
+OptiMap is a specialized extension for VS Code and Antigravity designed to streamline and optimize AI agent workflows. It focuses on analyzing, visualizing, and restructuring the network of `.md` files (Skills and Workflows) that guide AI assistants through complex tasks.
 
-## Features
+## Core Mission
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+When an AI assistant navigates a project's documentation and workflows, it often follows a trail of linked Markdown files. OptiMap ensures this trail is efficient, logical, and free of bottlenecks.
 
-For example if there is an image subfolder under your extension project workspace:
+## Key Features
 
-\!\[feature X\]\(images/feature-x.png\)
+- **Workflow Analysis**: Tracks the paths an AI assistant takes through `.md` files to identify common traversal patterns.
+- **Visual Mapping**: Generates an interactive graph showing how files link to one another (e.g., Skill A -> Workflow B).
+- **Diagnostic Insights**: Automatically highlights:
+    - **Loops**: Circular references that cause an AI to get stuck.
+    - **Wandering Files**: Orphaned or incorrectly linked files that don't contribute to a clear goal.
+- **Efficiency Optimization**: Suggests structural changes (like merging redundant steps or creating direct links) to minimize the number of jumps the AI needs to perform.
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+## How it Works
 
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Extension Settings
+1. **Scan**: OptiMap scans your `.agents/workflows` and `.agents/skills` directories.
+2. **Parse**: It identifies links, file references, and "see also" sections within Markdown.
+3. **Visualize**: It renders a dynamic graph in a VS Code Webview.
+4. **Optimize**: It provides a "One-Click Optimize" feature to prune unnecessary steps.
 
 Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
 
