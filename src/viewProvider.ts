@@ -207,7 +207,7 @@ export class OptiMapProvider implements vscode.WebviewViewProvider {
                 <script>
                     const vscode = acquireVsCodeApi();
                     let svg, simulation, link, node, label;
-                    let lastGraph, lastHasAgents;
+                    let lastGraph, lastHasAgents, lastOptimizations;
                     const width = document.body.clientWidth;
                     const height = 250;
                     let zoom;
@@ -216,6 +216,7 @@ export class OptiMapProvider implements vscode.WebviewViewProvider {
                         const m = event.data;
                         if (m.type === 'init') {
                             lastHasAgents = m.hasAgents;
+                            lastOptimizations = m.optimizations;
                             document.getElementById('optCount').innerText = m.optimizations.length;
                             renderOptimizations(m.optimizations, m.hasAgents);
                             updateGraph(m.graph, m.optimizations);
@@ -312,10 +313,12 @@ export class OptiMapProvider implements vscode.WebviewViewProvider {
                         }
                     }
 
-                    function focusIssue(nodeIds) {
-                        if (!nodeIds || nodeIds.length === 0) return;
+                    function focusIssue(optId) {
+                        const opt = lastOptimizations.find(o => o.id === optId);
+                        if (!opt || !opt.affectedNodes || opt.affectedNodes.length === 0) return;
+                        
                         // Find nodes in current graph
-                        const targets = node.data().filter(d => nodeIds.includes(d.id));
+                        const targets = node.data().filter(d => opt.affectedNodes.includes(d.id));
                         if (targets.length === 0) return;
 
                         const x = d3.mean(targets, d => d.x);
@@ -329,13 +332,14 @@ export class OptiMapProvider implements vscode.WebviewViewProvider {
                     }
 
                     function renderOptimizations(opts, hasAgents) {
+                        lastOptimizations = opts;
                         const list = document.getElementById('optList');
                         if (!opts || opts.length === 0) {
                             list.innerHTML = '<div style="padding: 10px 16px; opacity: 0.5; font-size: 11px;">No issues found. Everything is lean!</div>';
                             return;
                         }
                         list.innerHTML = opts.map(opt => \`
-                            <div class="opt-card \${opt.type}" onclick="focusIssue(\${JSON.stringify(opt.affectedNodes)})">
+                            <div class="opt-card \${opt.type}" onclick="focusIssue('\${opt.id}')">
                                 <span class="opt-title">\${opt.title}</span>
                                 <span class="opt-desc">\${opt.description}</span>
                                 \${opt.fix ? \`<button class="fix-btn" \${!hasAgents ? 'disabled title="Requires AI Agent"' : ''} onclick="event.stopPropagation(); applyFix('\${opt.id}')">Apply Fix \${!hasAgents ? '(No Agent)' : ''}</button>\` : ''}
