@@ -188,8 +188,16 @@ export class OptiMapProvider implements vscode.WebviewViewProvider {
 
                 <div class="section">
                     <div class="header">Active Workflow Mapping</div>
+                    <div style="padding: 4px 12px; font-size: 9px; opacity: 0.5; display: flex; gap: 10px; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: 4px;">
+                            <div style="width: 8px; height: 8px; border-radius: 50%; background: #007acc;"></div> Normal
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 4px;">
+                            <div style="width: 8px; height: 8px; border-radius: 50%; background: #f14c4c; border: 1px solid #ffcc00;"></div> Optimized/Problem
+                        </div>
+                    </div>
                     <div style="padding: 4px 12px; font-size: 9px; opacity: 0.5;">
-                        Drag to explore. Double click node to focus.
+                        Drag to explore. Click card to focus issue.
                     </div>
                 </div>
 
