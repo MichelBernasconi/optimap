@@ -14,12 +14,22 @@
   "main": "./out/extension.js",
   "contributes": {
     "viewsContainers": {
-      "activitybar": [
-        {
-          "id": "optimap-explorer",
-          "title": "OptiMap",
-          "icon": "resources/sidebar.png"
-        }
+           "activitybar": [
+                {
+                    "id": "optimap-explorer",
+                    "title": "OptiMap",
+                    "icon": "resources/optimap-icon.svg"
+                }
+            ]
+    },
+    "views": {
+      "optimap-explorer": [
+                {
+                    "type": "webview",
+                    "id": "optimap.view",
+                    "name": "OptiMap Dashboard",
+                    "icon": "resources/optimap-icon.svg"
+                }
       ]
     },
     "commands": [

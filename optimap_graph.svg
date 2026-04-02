@@ -1,0 +1,27 @@
+<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100%" height="100%" fill="#1e1e1e" rx="10"/>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="25" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#3498db" />
+    </marker>
+  </defs>
+  <line x1="150" y1="200" x2="400" y2="100" stroke="#3498db" stroke-width="2" marker-end="url(#arrowhead)" />
+  <line x1="150" y1="200" x2="400" y2="300" stroke="#3498db" stroke-width="2" marker-end="url(#arrowhead)" />
+  <g transform="translate(50,175)">
+    <rect width="200" height="50" rx="5" fill="#1a3a5a" stroke="#3498db" stroke-width="2"/>
+    <text x="100" y="30" font-family="Arial" font-size="14" fill="white" text-anchor="middle">mock_workflow.md</text>
+  </g>
+  <g transform="translate(400,75)">
+    <rect width="150" height="50" rx="5" fill="#2d3436" stroke="#2ecc71" stroke-width="2" stroke-dasharray="5,5"/>
+    <text x="75" y="30" font-family="Arial" font-size="14" fill="white" text-anchor="middle">step2.md</text>
+  </g>
+  <g transform="translate(400,275)">
+    <rect width="150" height="50" rx="5" fill="#2d3436" stroke="#e74c3c" stroke-width="2" stroke-dasharray="5,5"/>
+    <text x="75" y="30" font-family="Arial" font-size="14" fill="white" text-anchor="middle">issues.md</text>
+  </g>
+  <g transform="translate(400,175)">
+    <rect width="150" height="50" rx="5" fill="#2d3436" stroke="#95a5a6" stroke-width="2"/>
+    <text x="75" y="30" font-family="Arial" font-size="14" fill="white" text-anchor="middle">README.md</text>
+  </g>
+  <text x="20" y="380" font-family="Arial" font-size="12" fill="#95a5a6">Legenda: Blu = Origine | Verde = Step Finale | Rosso = Errori/Issues</text>
+</svg>

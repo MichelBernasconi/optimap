@@ -19,33 +19,45 @@ export interface AnalysisSummary {
     optimizations: OptimizationResult[];
 }
 
-/**
- * Builds a full analysis summary.
- */
-export async function getFullAnalysis(): Promise<AnalysisSummary> {
-    const graph = await buildGraph();
-    const trace = await getAgentTrace();
-    
-    // Perform optimizations
-    const cycles = detectCycles(graph);
-    const redundancies = findTraceRedundancies(trace);
-    
-    const optimizations: OptimizationResult[] = [...redundancies];
-    
-    cycles.forEach((cycle, index) => {
-        optimizations.push({
-            id: `cycle-${index}`,
-            type: 'cycle',
-            title: 'Circular Reference Detected',
-            description: `Found a potential infinite loop involving: ${cycle.map(id => path.basename(id)).join(' -> ')}`,
-            affectedNodes: cycle,
-            estimatedSavings: { tokens: 90, speed: 95 },
-            fix: { action: 'break_loop', target: cycle[0] }
-        });
-    });
+import { exportStaticAnalysis } from './exporter';
+ 
+ /**
+  * Builds a full analysis summary.
+  */
+ export async function getFullAnalysis(): Promise<AnalysisSummary> {
+     const graph = await buildGraph();
+     const trace = await getAgentTrace();
+     
+     // Perform optimizations
+     const cycles = detectCycles(graph);
+     const redundancies = findTraceRedundancies(trace);
+     
+     const optimizations: OptimizationResult[] = [...redundancies];
+     
+     cycles.forEach((cycle, index) => {
+         optimizations.push({
+             id: `cycle-${index}`,
+             type: 'cycle',
+             title: 'Circular Reference Detected',
+             description: `Found a potential infinite loop involving: ${cycle.map(id => path.basename(id)).join(' -> ')}`,
+             affectedNodes: cycle,
+             estimatedSavings: { tokens: 90, speed: 95 },
+             fix: { action: 'break_loop', target: cycle[0], content: cycle[1] } // content is the node to unlink from
+         });
+     });
+ 
+     const summary = { graph, trace, optimizations };
 
-    return { graph, trace, optimizations };
-}
+     // Export for Antigravity
+     try {
+         const root = process.cwd(); // Default to CWD for both modes
+         await exportStaticAnalysis(summary, root);
+     } catch (e) {
+         console.error('Export failed', e);
+     }
+
+     return summary;
+ }
 
 /**
  * Builds a graph representation of the workflow network.
@@ -60,8 +72,7 @@ export async function buildGraph(): Promise<GraphData> {
     const nodeMap = new Map<string, GraphNode>();
 
     // 1. Create nodes
-    for (const fileUri of files) {
-        const fullPath = fileUri.fsPath;
+    for (const fullPath of files) {
         const id = fullPath;
         const label = extractLabel(fullPath);
         
@@ -92,14 +103,25 @@ export async function buildGraph(): Promise<GraphData> {
 /**
  * Retrieves the agent trace, either from a mock file or a real log.
  */
-export async function getAgentTrace(): Promise<TraceStep[]> {
-    const workspaceFolders = vscode.workspace.workspaceFolders;
-    if (!workspaceFolders) return [];
+export async function getAgentTrace(workspaceRoot?: string): Promise<TraceStep[]> {
+    let root = workspaceRoot;
+    
+    if (!root) {
+        try {
+            const vscode = require('vscode');
+            const workspaceFolders = vscode.workspace.workspaceFolders;
+            if (workspaceFolders) root = workspaceFolders[0].uri.fsPath;
+        } catch (e) {
+            root = process.cwd();
+        }
+    }
+
+    if (!root) return [];
 
     // Try to find a trace.log or overview.txt in the workspace for testing
     const possibleLogPaths = [
-        path.join(workspaceFolders[0].uri.fsPath, 'trace.log'),
-        path.join(workspaceFolders[0].uri.fsPath, 'overview.txt')
+        path.join(root, 'trace.log'),
+        path.join(root, 'overview.txt')
     ];
 
     for (const logPath of possibleLogPaths) {
@@ -108,6 +130,5 @@ export async function getAgentTrace(): Promise<TraceStep[]> {
         }
     }
 
-    // Default mock data for presentation if no log is found
     return [];
 }

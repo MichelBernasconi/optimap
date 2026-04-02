@@ -30,7 +30,7 @@ export function detectCycles(graph: GraphData): string[][] {
     const cycles: string[][] = [];
     const visited = new Set<string>();
     const stack = new Set<string>();
-    const path: string[] = [];
+    let path: string[] = [];
 
     function dfs(u: string) {
         visited.add(u);
@@ -42,7 +42,12 @@ export function detectCycles(graph: GraphData): string[][] {
             if (stack.has(v)) {
                 // Cycle found
                 const cycleStartIndex = path.indexOf(v);
-                cycles.push(path.slice(cycleStartIndex));
+                const cycle = path.slice(cycleStartIndex);
+                // Only add if it's a non-trivial cycle (length > 1) 
+                // OR technically a self-loop is a cycle too, but user hates them.
+                if (cycle.length > 1) {
+                    cycles.push(cycle);
+                }
             } else if (!visited.has(v)) {
                 dfs(v);
             }
@@ -53,10 +58,25 @@ export function detectCycles(graph: GraphData): string[][] {
     }
 
     graph.nodes.forEach(n => {
-        if (!visited.has(n.id)) dfs(n.id);
+        if (!visited.has(n.id)) {
+            path = [];
+            dfs(n.id);
+        }
     });
 
-    return cycles;
+    // Remove duplicate cycles (e.g. A->B->A and B->A->B)
+    const uniqueCycles: string[][] = [];
+    const seenCycles = new Set<string>();
+    
+    cycles.forEach(c => {
+        const sorted = [...c].sort().join('|');
+        if (!seenCycles.has(sorted)) {
+            seenCycles.add(sorted);
+            uniqueCycles.push(c);
+        }
+    });
+
+    return uniqueCycles;
 }
 
 /**

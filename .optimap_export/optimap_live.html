@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OptiMap Live Preview</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body { margin: 0; background: #1a1a1a; color: white; font-family: sans-serif; overflow: hidden; height: 100vh; }
+        #canvas { width: 100%; height: 100%; }
+        .node { stroke: #3498db; stroke-width: 2px; }
+        .link { stroke: #555; stroke-opacity: 0.6; }
+        .label { fill: white; font-size: 12px; pointer-events: none; text-anchor: middle; }
+    </style>
+</head>
+<body>
+    <div id="canvas"></div>
+    <script>
+        const data = {"graph":{"nodes":[{"id":"C:\\Users\\miche\\GitHub\\optimap\\.optimap_export\\PROJECT_MAP.md","label":"OptiMap Project Visualization (Antigravity Mode)","fullPath":"C:\\Users\\miche\\GitHub\\optimap\\.optimap_export\\PROJECT_MAP.md"},{"id":"C:\\Users\\miche\\GitHub\\optimap\\CHANGELOG.md","label":"Change Log","fullPath":"C:\\Users\\miche\\GitHub\\optimap\\CHANGELOG.md"},{"id":"C:\\Users\\miche\\GitHub\\optimap\\HOW_TO_OPTIMIZE_WITH_AI.md","label":"OptMap: AI Optimization Workflow","fullPath":"C:\\Users\\miche\\GitHub\\optimap\\HOW_TO_OPTIMIZE_WITH_AI.md"},{"id":"C:\\Users\\miche\\GitHub\\optimap\\issues.md","label":"Common Issues","fullPath":"C:\\Users\\miche\\GitHub\\optimap\\issues.md"},{"id":"C:\\Users\\miche\\GitHub\\optimap\\mock_workflow.md","label":"Start Here","fullPath":"C:\\Users\\miche\\GitHub\\optimap\\mock_workflow.md"},{"id":"C:\\Users\\miche\\GitHub\\optimap\\PROJECT_MAP.md","label":"OptiMap Analysis Dashboard (Antigravity Mode)","fullPath":"C:\\Users\\miche\\GitHub\\optimap\\PROJECT_MAP.md"},{"id":"C:\\Users\\miche\\GitHub\\optimap\\README.md","label":"OptiMap README","fullPath":"C:\\Users\\miche\\GitHub\\optimap\\README.md"},{"id":"C:\\Users\\miche\\GitHub\\optimap\\step2.md","label":"Step 2","fullPath":"C:\\Users\\miche\\GitHub\\optimap\\step2.md"},{"id":"C:\\Users\\miche\\GitHub\\optimap\\vsc-extension-quickstart.md","label":"Welcome to your VS Code Extension","fullPath":"C:\\Users\\miche\\GitHub\\optimap\\vsc-extension-quickstart.md"}],"edges":[{"source":"C:\\Users\\miche\\GitHub\\optimap\\mock_workflow.md","target":"C:\\Users\\miche\\GitHub\\optimap\\step2.md","type":"link"},{"source":"C:\\Users\\miche\\GitHub\\optimap\\mock_workflow.md","target":"C:\\Users\\miche\\GitHub\\optimap\\issues.md","type":"link"},{"source":"C:\\Users\\miche\\GitHub\\optimap\\PROJECT_MAP.md","target":"C:\\Users\\miche\\GitHub\\optimap\\.optimap_export\\PROJECT_MAP.md","type":"link"}]},"trace":[{"timestamp":"Step 1","nodeId":"c:\\Users\\miche\\GitHub\\optimap\\mock_workflow.md","action":"view_file"},{"timestamp":"Step 2","nodeId":"c:\\Users\\miche\\GitHub\\optimap\\step2.md","action":"view_file"},{"timestamp":"Step 3","nodeId":"c:\\Users\\miche\\GitHub\\optimap\\mock_workflow.md","action":"view_file"},{"timestamp":"Step 4","nodeId":"c:\\Users\\miche\\GitHub\\optimap\\issues.md","action":"view_file"}],"optimizations":[]};
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        
+        const svg = d3.select("#canvas").append("svg").attr("width", width).attr("height", height);
+        const container = svg.append("g");
+        
+        const simulation = d3.forceSimulation(data.graph.nodes)
+            .force("link", d3.forceLink(data.graph.edges).id(d => d.id).distance(150))
+            .force("charge", d3.forceManyBody().strength(-500))
+            .force("center", d3.forceCenter(width / 2, height / 2));
+
+        const link = container.append("g").selectAll("line").data(data.graph.edges).enter().append("line").attr("class", "link");
+        const node = container.append("g").selectAll("circle").data(data.graph.nodes).enter().append("circle")
+            .attr("r", 10).attr("fill", "#1a3a5a").attr("class", "node")
+            .call(d3.drag().on("start", dragstarted).on("drag", dragged).on("end", dragended));
+
+        const label = container.append("g").selectAll("text").data(data.graph.nodes).enter().append("text")
+            .text(d => d.label).attr("class", "label").attr("dy", -15);
+
+        simulation.on("tick", () => {
+            link.attr("x1", d=>d.source.x).attr("y1", d=>d.source.y).attr("x2", d=>d.target.x).attr("y2", d=>d.target.y);
+            node.attr("cx", d=>d.x).attr("cy", d=>d.y);
+            label.attr("x", d=>d.x).attr("y", d=>d.y);
+        });
+
+        function dragstarted(event, d) { if (!event.active) simulation.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; }
+        function dragged(event, d) { d.fx = event.x; d.fy = event.y; }
+        function dragended(event, d) { if (!event.active) simulation.alphaTarget(0); d.fx = null; d.fy = null; }
+        
+        svg.call(d3.zoom().on("zoom", (event) => { container.attr("transform", event.transform); }));
+    </script>
+</body>
+</html>
