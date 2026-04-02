@@ -272,10 +272,14 @@ export class OptiMapProvider implements vscode.WebviewViewProvider {
                             if (opt.affectedNodes) opt.affectedNodes.forEach(id => issueNodes.add(id));
                         });
 
-                        const simulation = d3.forceSimulation(nodes)
-                            .force("link", d3.forceLink(links).id(d => d.id).distance(50))
-                            .force("charge", d3.forceManyBody().strength(-100))
-                            .force("center", d3.forceCenter(width / 2, height / 2));
+                        const simulation = d3.forceSimulation()
+                            .force("link", d3.forceLink().id(d => d.id).distance(80))
+                            .force("charge", d3.forceManyBody().strength(-150))
+                            .force("center", d3.forceCenter(width / 2, height / 2))
+                            .alphaDecay(0.05);
+
+                        simulation.nodes(nodes);
+                        simulation.force("link").links(links);
 
                         link = g.append("g")
                             .attr("class", "links")

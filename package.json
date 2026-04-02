@@ -1,8 +1,22 @@
 {
   "name": "optimap",
   "displayName": "OptiMap",
-  "description": "Visualizing and optimizing your code flow with interactive maps.",
-  "version": "0.0.1",
+  "description": "The ultimate visualizer for AI Agent Workflows. Optimize paths, detect loops, and focus on bottlenecks.",
+  "version": "0.1.0",
+  "publisher": "MichelBernasconi",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MichelBernasconi/optimap.git"
+  },
+  "keywords": [
+    "ai",
+    "workflow",
+    "visualization",
+    "optimizer",
+    "d3js",
+    "automation",
+    "agentic"
+  ],
   "icon": "resources/logo.png",
   "engines": {
     "vscode": "^1.110.0"
