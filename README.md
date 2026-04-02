@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="resources/logo.png" width="120" alt="OptiMap Logo" />
-</p>
-
 # OptiMap: AI Workflow Visualizer & Optimizer
 
 ![OptiMap Banner](resources/banner.png)
@@ -63,6 +59,5 @@ We believe in transparency and security:
 ---
 
 <p align="center">
-  Made with ❤️ for the <b>Antigravity</b> community.<br/>
   <i>Optimize your AI, empower your project.</i>
 </p>
