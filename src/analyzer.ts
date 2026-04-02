@@ -34,10 +34,10 @@ export async function getFullAnalysis(): Promise<AnalysisSummary> {
     
     cycles.forEach((cycle, index) => {
         optimizations.push({
-            id: `cycle-\${index}`,
+            id: `cycle-${index}`,
             type: 'cycle',
             title: 'Circular Reference Detected',
-            description: `Found a potential infinite loop involving: \${cycle.map(id => path.basename(id)).join(' -> ')}`,
+            description: `Found a potential infinite loop involving: ${cycle.map(id => path.basename(id)).join(' -> ')}`,
             affectedNodes: cycle,
             estimatedSavings: { tokens: 90, speed: 95 },
             fix: { action: 'break_loop', target: cycle[0] }

@@ -75,10 +75,10 @@ export function findTraceRedundancies(trace: TraceStep[]): OptimizationResult[] 
             // Saving: (count - 1) steps out of total trace length
             const savedRatio = Math.round(((count - 1) / trace.length) * 100);
             redundancies.push({
-                id: `red-\${nodeId}-\${Date.now()}`,
+                id: `red-${nodeId}-${Date.now()}`,
                 type: 'redundancy',
                 title: 'High Visit Count',
-                description: `Agent visited this file \${count} times. Consider merging content or clarifying the path.`,
+                description: `Agent visited this file ${count} times. Consider merging content or clarifying the path.`,
                 affectedNodes: [nodeId],
                 estimatedSavings: { tokens: savedRatio, speed: savedRatio + 5 },
                 fix: { action: 'delegate_to_ai', target: nodeId }
@@ -104,7 +104,7 @@ export function suggestShortcuts(trace: TraceStep[]): OptimizationResult[] {
             // Saving 1 step out of total trace length
             const savedRatio = Math.round((1 / trace.length) * 100);
             potentialShortcuts.push({
-                id: `short-\${a}-\${c}-\${i}`,
+                id: `short-${a}-${c}-${i}`,
                 type: 'shortcut',
                 title: 'Potential Shortcut',
                 description: `Agent frequently jumps from A to C via B. Consider adding a direct link.`,
@@ -113,7 +113,7 @@ export function suggestShortcuts(trace: TraceStep[]): OptimizationResult[] {
                 fix: { 
                     action: 'add_link', 
                     target: a, 
-                    content: `[Quick Access to C](\${c})` 
+                    content: `[Quick Access to C](${c})` 
                 }
             });
         }

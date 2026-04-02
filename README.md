@@ -53,11 +53,27 @@ Added features X, Y, and Z.
 
 ---
 
-## Following extension guidelines
+## How to Test Locally
 
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
+### 1. VS Code Extension Mode (Full UI)
+1.  Open the `optimap` folder in Visual Studio Code.
+2.  Press **F5** (or go to `Run and Debug` -> `Launch Extension`).
+3.  A new **[Extension Development Host]** window will open.
+4.  In the new window, open any folder containing `.md` files.
+5.  Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on Mac) and run **"OptiMap: Analyze AI Workflow Paths"**.
+6.  The visual map and optimization sidebar will appear.
 
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
+### 2. Standalone Logic Test (No VS Code required)
+If you want to verify the graph parsing and trace analysis logic quickly:
+1.  Open your terminal.
+2.  Run `npm run compile`.
+3.  Run `node ./out/validate.js`.
+4.  This will output the results of the analysis on the bundled `trace.log` and `mock_workflow.md` files.
+
+### 3. Integrated AI Optimization
+You can ask your AI assistant (e.g., Antigravity) to:
+*"Analyze this project with OptiMap and tell me if there are any infinite loops or redundant steps."*
+The agent will use its internal tools to read the analysis and suggest fixes.
 
 ## Working with Markdown
 

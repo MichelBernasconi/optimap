@@ -156,26 +156,30 @@ export class OptiMapProvider {
                     };
 
                     function renderGraph() {
-                        const width = document.getElementById('canvas').clientWidth;
-                        const height = document.getElementById('canvas').clientHeight;
-                        document.getElementById('canvas').innerHTML = ''; // Clean
+                        const canvas = document.getElementById('canvas');
+                        const width = canvas.clientWidth;
+                        const height = canvas.clientHeight;
+                        canvas.innerHTML = ''; 
                         
                         const svg = d3.select("#canvas").append("svg")
-                            .attr("width", width)
-                            .attr("height", height)
+                            .attr("viewBox", '0 0 ' + width + ' ' + height)
+                            .attr("width", "100%")
+                            .attr("height", "100%")
                             .call(d3.zoom().on("zoom", (e) => { container.attr("transform", e.transform); }));
                         
                         const container = svg.append("g");
                         const simulation = d3.forceSimulation(graphData.nodes)
-                            .force("link", d3.forceLink(graphData.edges).id(d => d.id).distance(80))
-                            .force("charge", d3.forceManyBody().strength(-200))
-                            .force("center", d3.forceCenter(width / 2, height / 2));
+                            .force("link", d3.forceLink(graphData.edges).id(d => d.id).distance(120))
+                            .force("charge", d3.forceManyBody().strength(-400))
+                            .force("center", d3.forceCenter(width / 2, height / 2))
+                            .force("x", d3.forceX(width / 2).strength(0.1))
+                            .force("y", d3.forceY(height / 2).strength(0.1));
 
                         const links = container.append("g").selectAll("line").data(graphData.edges).enter().append("line").attr("class", "edge");
 
                         const nodes = container.append("g").selectAll("circle")
                             .data(graphData.nodes).enter().append("circle")
-                            .attr("r", 7).attr("fill", "#007acc").attr("class", d => {
+                            .attr("r", 10).attr("fill", "#007acc").attr("class", d => {
                                 let cls = "node";
                                 optimizations.forEach(o => {
                                     if (o.affectedNodes.includes(d.id)) cls += " " + o.type;
@@ -193,12 +197,21 @@ export class OptiMapProvider {
                             }));
 
                         const labels = container.append("g").selectAll("text").data(graphData.nodes).enter().append("text")
-                            .text(d => d.label).attr("class", "node-label").attr("dx", 10).attr("dy", 3).attr("fill", "#ccc");
+                            .text(d => d.label).attr("class", "node-label").attr("dx", 14).attr("dy", 5).attr("fill", "#fff")
+                            .style("text-shadow", "0 0 4px #000");
 
                         simulation.on("tick", () => {
                             links.attr("x1", d=>d.source.x).attr("y1", d=>d.source.y).attr("x2", d=>d.target.x).attr("y2", d=>d.target.y);
                             nodes.attr("cx", d=>d.x).attr("cy", d=>d.y);
                             labels.attr("x", d=>d.x).attr("y", d=>d.y);
+                        });
+
+                        // Resize handling
+                        window.addEventListener('resize', () => {
+                            const w = canvas.clientWidth;
+                            const h = canvas.clientHeight;
+                            svg.attr("viewBox", '0 0 ' + w + ' ' + h);
+                            simulation.force("center", d3.forceCenter(w / 2, h / 2)).restart();
                         });
                     }
 
