@@ -1,5 +1,7 @@
 # OptiMap: AI Workflow Visualizer & Optimizer
 
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/hoppingdreams)
+
 ![OptiMap Banner](resources/banner.png)
 
 **OptiMap** is a premium VS Code extension designed to bring clarity and efficiency to **AI Agent Workflows**. It analyzes your workspace (Workflows, Skills, and Documentation), generates an interactive graph, and identifies structural bottlenecks that slow down or confuse AI assistants.

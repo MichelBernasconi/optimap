@@ -215,6 +215,15 @@ export class OptiMapProvider implements vscode.WebviewViewProvider {
                 </div>
 
                 <div class="section">
+                    <div class="header">Support Project</div>
+                    <div style="padding: 8px 12px; text-align: center;">
+                        <a href="https://buymeacoffee.com/hoppingdreams" style="color: var(--vscode-textLink-foreground); text-decoration: none; font-size: 11px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                            ☕ Buy me a coffee
+                        </a>
+                    </div>
+                </div>
+
+                <div class="section">
                     <div class="header">Actions</div>
                     <div class="item" onclick="openMap()">📂 Open Full-Screen Interactive Map</div>
                     <div class="item" onclick="scan()">⚡ Force Re-analyze</div>
