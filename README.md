@@ -51,6 +51,16 @@ We believe in transparency and security:
 
 ---
 
+## 📥 Installation (Manual)
+
+1.  Go to the **[Releases](https://github.com/MichelBernasconi/optimap/releases)** page.
+2.  Download the `optimap-0.1.0.vsix` file.
+3.  In VS Code, open the **Extensions** view (`Ctrl+Shift+X`).
+4.  Click the `...` menu (top-right actions) and select **Install from VSIX...**
+5.  Select the downloaded file and restart VS Code.
+
+---
+
 ## 🛠️ Testing Locally
 
 1.  Clone the repository.
