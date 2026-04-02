@@ -207,6 +207,14 @@ export class OptiMapProvider implements vscode.WebviewViewProvider {
                 </div>
 
                 <div class="section">
+                    <div class="header">Search Nodes</div>
+                    <div style="padding: 0 8px 8px 8px; display: flex; gap: 4px;">
+                        <input type="text" id="nodeSearch" placeholder="Search file name..." style="flex: 1; background: var(--vscode-input-background); color: var(--vscode-input-foreground); border: 1px solid var(--vscode-input-border); padding: 4px; font-size: 11px; border-radius: 2px;" onkeyup="if(event.key === 'Enter') searchNode()">
+                        <button onclick="searchNode()" style="background: var(--vscode-button-background); color: var(--vscode-button-foreground); border: none; padding: 0 8px; font-size: 11px; border-radius: 2px; cursor: pointer;">🔍</button>
+                    </div>
+                </div>
+
+                <div class="section">
                     <div class="header">Actions</div>
                     <div class="item" onclick="openMap()">📂 Open Full-Screen Interactive Map</div>
                     <div class="item" onclick="scan()">⚡ Force Re-analyze</div>
@@ -353,6 +361,28 @@ export class OptiMapProvider implements vscode.WebviewViewProvider {
                                 \${opt.fix ? \`<button class="fix-btn" \${!hasAgents ? 'disabled title="Requires AI Agent"' : ''} onclick="event.stopPropagation(); applyFix('\${opt.id}')">Apply Fix \${!hasAgents ? '(No Agent)' : ''}</button>\` : ''}
                             </div>
                         \`).join('');
+                    }
+
+                    function searchNode() {
+                        const input = document.getElementById('nodeSearch');
+                        const query = input.value.toLowerCase().trim();
+                        if (!query) return;
+
+                        const target = node.data().find(d => 
+                            d.label.toLowerCase().includes(query) || 
+                            d.id.toLowerCase().includes(query)
+                        );
+
+                        if (target) {
+                            const svgElem = d3.select("svg");
+                            svgElem.transition().duration(750).call(
+                                zoom.transform,
+                                d3.zoomIdentity.translate(width / 2, height / 2).scale(2.5).translate(-target.x, -target.y)
+                            );
+                            input.style.border = "1px solid var(--vscode-button-background)";
+                        } else {
+                            input.style.border = "1px solid #f14c4c";
+                        }
                     }
 
                     function scan() { vscode.postMessage({ type: 'scan' }); }
