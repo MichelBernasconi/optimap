@@ -9,3 +9,10 @@ vsc-extension-quickstart.md
 **/*.map
 **/*.ts
 **/.vscode-test.*
+.optimap_export/**
+PROJECT_MAP.md
+issues.md
+mock_workflow.md
+step2.md
+trace.log
+publication_plan.md

@@ -8,6 +8,11 @@
     "type": "git",
     "url": "https://github.com/MichelBernasconi/optimap.git"
   },
+  "homepage": "https://michelbernasconi.ch/optimap",
+  "bugs": {
+    "url": "https://github.com/MichelBernasconi/optimap/issues"
+  },
+  "qna": "marketplace",
   "keywords": [
     "ai",
     "workflow",
@@ -15,7 +20,9 @@
     "optimizer",
     "d3js",
     "automation",
-    "agentic"
+    "agentic",
+    "graphs",
+    "productivity"
   ],
   "icon": "resources/logo.png",
   "engines": {
